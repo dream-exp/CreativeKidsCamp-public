@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/tournament_style.css">
+	<title>Challenge Cup 2018 トーナメント</title>
+</head>
+<body>
+	<h1>Challenge Cup 2018</h1>
+	<div class="graph">
+		<img src="images/tournament/winner.png" class="crown">
+		<div class="tournament">
+			<div class="first-left"></div>
+			<div class="first-right"></div>
+			<div class="second-left"></div>
+			<div class="second-right"></div>
+			<div class="third-left"></div>
+			<div class="third-right"></div>
+			<div class="fourth-left"></div>
+			<div class="fourth-right"></div>
+			<div class="fifth-left"></div>
+			<div class="fifth-right"></div>
+			<div class="winner"></div>
+		</div>
+	</div>
+	<div class="names">
+		<p class="name">徳山太郎 くん</p>
+		<p class="name">徳山太郎 くん</p>
+		<p class="name">徳山太郎 くん</p>
+		<p class="name">徳山太郎 くん</p>
+		<p class="name">徳山太郎 くん</p>
+		<p class="name">徳山太郎 くん</p>
+	</div>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="js/commonScript.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/tournamentScript.js"></script>
+	<script type="text/javascript">
+		socket.on("getParticipants", (participants) => {
+			$("p.name").each((i, elem) => {
+				console.log(participants[i]);
+				elem.innerText = participants[i];
+			})
+		});
+
+		socket.on("getWinlog", (winlog) => {
+			console.log(winlog);
+
+			firstLeft(winlog[0][0]);
+			firstRight(winlog[0][1]);
+			secondLeft(winlog[1][0]);
+			secondRight(winlog[1][1]);
+			thirdLeft(winlog[2][0]);
+			thirdRight(winlog[2][1]);
+			fourthLeft(winlog[3][0]);
+			fourthRight(winlog[3][1]);
+			fifthLeft(winlog[4][0]);
+			fifthRight(winlog[4][1]);
+
+			if (winlog[0][0])
+				firstLeft(winlog[0][0]);
+			if(winlog[0][1])
+				firstRight(winlog[0][1]);
+			if(winlog[1][0])
+				secondLeft(winlog[1][0]);
+			if(winlog[1][1])
+				secondRight(winlog[1][1]);
+			if(winlog[2][0])
+				thirdLeft(winlog[2][0]);
+			if(winlog[2][1])
+				thirdRight(winlog[2][1]);
+			if(winlog[3][0])
+				fourthLeft(winlog[3][0]);
+			if(winlog[3][1])
+				fourthRight(winlog[3][1]);
+			if(winlog[4][0])
+				fifthLeft(winlog[4][0]);
+			if(winlog[4][1])
+				fifthRight(winlog[4][1]);
+		});
+
+		$(window).load(() => {
+			socket.emit("getParticipants", null);
+			socket.emit("getWinlog", null);
+		})
+	</script>
+</body>
+</html>

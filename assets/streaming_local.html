@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>CC2018 中継画面</title>
+<link rel="stylesheet" href="css/commonStyle.css">
+<link href="css/video-js.css" rel="stylesheet">
+</head>
+<body>
+	<div class="player1">
+		<p class="player1">プレイヤー1</p>
+	</div>
+	<div id="middle">
+		<p>CC2018</p>
+	</div>
+	<div id="counter">
+		<p class="label">のこり</p>
+		<p class="count">60</p>
+	</div>
+	<div id="start_circle">
+		<p class="start_count">
+			3
+		</p>
+	</div>
+	<div id="finish_circle">
+		<p>
+			ここまで
+		</p>
+	</div>
+	<div class="player2">
+		<p class="player2">プレイヤー2</p>
+	</div>
+<!-- <video id="streaming" class="video-js vjs-default-skin" autoplay="autoplay" controls="controls" width="1920" data-setup="{}">
+<source src="rtmp://192.168.0.2/live/" type="rtmp/mp4" />
+</video> -->
+<video id="streaming" autoplay="autoplay" width="1920" height="1080"></video>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/commonScript.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/video.js"></script>
+<script src="js/videojs-flash.min.js"></script>
+</body>
+<script type="text/javascript">
+	var video = document.getElementById('streaming');
+	var localStream = null;
+	navigator.getUserMedia({video: {width: 1280, height: 720}, audio: false}, 
+		function(stream) {
+			console.log(stream);
+			video.src = window.URL.createObjectURL(stream);
+		},
+		function(err) {
+			console.log(err);
+		}
+		);
+
+	var start_time;
+	var time;
+
+	var music = new Audio('images/streming/現代に潜む忍者的なBGM.mp3');
+
+	var finish = () => {
+		$("div#finish_circle").show();
+
+		music.pause();
+		new Audio('images/streming/gong3.mp3').play();
+	}
+
+	var start = () => {
+		$("p.start_count").text(start_time.toString());
+
+		if(start_time == 0) {
+			clearInterval(start_clock);
+			$("div#start_circle").hide();
+			new Audio('images/streming/gong1.mp3').play();
+			setTimeout(() => {music.play();}, 800);
+		}
+		start_time--;
+	}
+
+	var timer = () => {
+		$("p.count").text(time.toString());
+
+		if(time <= 10)
+			$("p.count").css({"color":"red"});
+		else
+			$("p.count").css({"color":"white"});
+
+		if(time == 0) {
+			clearInterval(clock);
+			finish();
+		}
+
+		time--;
+	}
+
+	socket.on("getPlayer1", (name) => {
+	  	$("p.player1").text(name);
+	});
+
+	socket.on("getPlayer2", (name) => {
+	  	$("p.player2").text(name);
+	});
+
+	socket.on("battleStart", () => {
+		$("div#start_circle").show();
+
+		start_time = 3;
+
+		start_clock = setInterval(start, 1000);
+
+		time = start_time + 60;
+		
+		clock = setInterval(timer, 1000);
+
+		console.log("finish");
+	});
+
+	socket.on("battleExtend", () => {
+		start_time = 3;
+
+		$("div#finish_circle").hide();
+
+		$("div#start_circle").show();
+		$("p.start_count").text(start_time.toString());
+
+		music = new Audio('images/streming/orchestral_mission.mp3');
+
+		start_clock = setInterval(start, 1000);
+
+		time = start_time + 30;
+		
+		clock = setInterval(timer, 1000);
+
+		console.log("finish");
+	});
+
+	$(window).load(() => {
+		socket.emit("getPlayer1", null);
+		socket.emit("getPlayer2", null);
+	})
+</script>
+<style type="text/css">
+	video#streaming {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	div.player1 {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 999;
+		width: 640px;
+		height: 150px;
+		background: #1BB8E6;
+	}
+
+	div#middle {
+		position: absolute;
+		top: 0;
+		left: 640px;
+		z-index: 999;
+		width: 640px;
+		height: 150px;
+		background: #f7ec39;
+	}
+
+	div.player2 {
+		position: absolute;
+		top: 0;
+		left: 1280px;
+		z-index: 999;
+		width: 640px;	
+		height: 150px;
+		background: #E34809;
+	}
+
+	div > p {
+		color: #fff;
+		font-size: 40px;
+		font-weight: bold;
+		text-align: center;
+		line-height: 150px;
+	}
+
+	div#middle > p {
+		color: #000;
+	}
+
+	div#counter {
+		position: absolute;
+		top: 150px;
+		left: 810px;
+		width: 300px;
+		height: 200px;
+		background: url(images/streming/counter_bg.png);
+		background-size: contain;
+		background-repeat: no-repeat;
+		z-index: 999;
+	}
+
+	div#counter > p.label {
+		font-size: 30px;
+		height: 40px;
+		line-height: 60px;
+	}
+
+	div#counter > p.count {
+		font-size: 100px;
+		line-height: 140px;
+		text-align: center;
+	}
+
+	div#start_circle, div#finish_circle {
+		display: none;
+		position: absolute;
+		top: 200px;
+		left: 560px;
+		width: 800px;
+		height: 800px;
+		z-index: 1000;
+	}
+
+	div#start_circle {
+		background: url(images/streming/circle.png);
+		background-size: cover;
+	}
+
+	div#finish_circle {
+		background: url(images/streming/finish_circle.png);
+		background-size: cover;
+	}
+
+	div#start_circle > p {
+		line-height: 800px;
+		font-size: 350px; 
+	}
+
+	div#finish_circle > p {
+		line-height: 800px;
+		font-size: 150px; 
+	}
+</style>
+</html>

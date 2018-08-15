@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>CreativeKidsCamp | Control</title>
+<style type="text/css">
+	div#participants {
+		display: flex;
+		flex-direction: column;
+	}
+
+	div#participants > div {
+		margin: 5px 0;
+		width: 600px;
+		height: 40px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	div#participants > div > input {
+		width: 300px;
+		height: 35px;
+	}
+
+	button {
+		margin: 10px 3px;
+		width: 100px;
+		height: 40px;
+		color: #303030
+		background: #fff;
+		border: solid 1px #000;
+	}
+
+	div#transitions {
+		display: flex;
+		align-items: center;
+	}
+
+	div#wrapper {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+	}
+
+	div#tournament {
+		position: relative;
+	}
+
+	div#tournament > button {
+		position: absolute;
+		width: 50px;
+	}
+
+	button.fifth-left {
+		left: 200px;
+		top: 0;
+	}
+
+	button.fifth-right {
+		left: 600px;
+		top: 0;
+	}
+
+	button.third-left {
+		left: 100px;
+		top: 80px;
+	}
+
+	button.third-right {
+		left: 300px;
+		top: 80px;
+	}
+
+	button.fourth-left {
+		left: 500px;
+		top: 80px;
+	}
+
+	button.fourth-right {
+		left: 700px;
+		top: 80px;
+	}
+
+	button.first-left {
+		left: 250px;
+		top: 160px;
+	}
+
+	button.first-right {
+		left: 350px;
+		top: 160px;
+	}
+
+	button.second-left {
+		left: 450px;
+		top: 160px;
+	}
+
+	button.second-right {
+		left: 550px;
+		top: 160px;
+	}
+
+	div#tournament > p {
+		
+		position: absolute;
+	}
+
+	p.name.A {
+		left: 120px;
+		top: 140px;
+	}
+
+	p.name.B {
+		top: 220px;
+		left: 270px;
+	}
+
+	p.name.C {
+		top: 220px;
+		left: 370px;
+	}
+
+	p.name.D {
+		top:220px;
+		left: 470px;
+	}
+
+	p.name.E {
+		top:220px;
+		left: 570px;
+	}
+
+	p.name.F {
+		left: 720px;
+		top: 140px;
+	}
+
+	
+</style>
+</head>
+<body>
+<h1>クリエイティブキッズキャンプ コントローラ</h1>
+<p>現在の画面 : <span id="current"></span></p>
+<div id="transitions">
+	<button id="forWaiting" onClick="transition('index')">待機画面</button>
+	<button id="forDolly" onClick="transition('dolly')">ドリィデモ画面</button>
+	<button id="prevSlide" onClick="changeSlide('prev')">前のスライド</button>
+	<button id="nextSlide" onClick="changeSlide('next')">次のスライド</button>
+	<button id="tournament" onClick="transition('tournament')">トーナメント表</button>
+	<button id="streaming" onClick="transition('streaming')">中継画面</button>
+	<button id="first_prize" onClick="transition('first_prize')">優勝画面</button>
+	<button id="second_prize" onClick="transition('second_prize')">準優勝画面</button>
+	<button id="design_prize" onClick="transition('design_prize')">デザイン賞画面</button>
+</div>
+<div>
+	<input class="nextTime" id="dolly" value="00:00"/>
+	<input class="nextTime" id="cc2018" value="00:00"/>
+	<button  onClick="setNextTime()">次の開催時間をセット</button>
+</div>
+<div id="wrapper">
+	<div id="participants">
+		<div>
+			<input class="participant one" value="山本 一郎" />
+			<button onClick="setPlayer1('one')">青</button>
+			<button onClick="setPlayer2('one')">赤</button>
+			<button onClick="setFirstPrizeName('one')">優勝</button>
+			<button onClick="setSecondPrizeName('one')">準優勝</button>
+			<button onClick="setDesignPrizeName('one')">デザイン賞</button>
+		</div>
+		<div>
+			<input class="participant two"  value="山本 二郎"/>
+			<button onClick="setPlayer1('two')">青</button>
+			<button onClick="setPlayer2('two')">赤</button>
+			<button onClick="setFirstPrizeName('two')">優勝</button>
+			<button onClick="setSecondPrizeName('two')">準優勝</button>
+			<button onClick="setDesignPrizeName('two')">デザイン賞</button>
+		</div>
+		<div>
+			<input class="participant three"  value="山本 三郎"/>
+			<button onClick="setPlayer1('three')">青</button>
+			<button onClick="setPlayer2('three')">赤</button>
+			<button onClick="setFirstPrizeName('three')">優勝</button>
+			<button onClick="setSecondPrizeName('three')">準優勝</button>
+			<button onClick="setDesignPrizeName('three')">デザイン賞</button>
+		</div>
+		<div>
+			<input class="participant four"  value="山本 四郎"/>
+			<button onClick="setPlayer1('four')">青</button>
+			<button onClick="setPlayer2('four')">赤</button>
+			<button onClick="setFirstPrizeName('four')">優勝</button>
+			<button onClick="setSecondPrizeName('four')">準優勝</button>
+			<button onClick="setDesignPrizeName('four')">デザイン賞</button>
+		</div>
+		<div>
+			<input class="participant five"  value="山本 五郎"/>
+			<button onClick="setPlayer1('five')">青</button>
+			<button onClick="setPlayer2('five')">赤</button>
+			<button onClick="setFirstPrizeName('five')">優勝</button>
+			<button onClick="setSecondPrizeName('five')">準優勝</button>
+			<button onClick="setDesignPrizeName('five')">デザイン賞</button>
+		</div>
+		<div>
+			<input class="participant six"  value="山本 六郎"/>
+			<button  onClick="setPlayer1('six')">青</button>
+			<button onClick="setPlayer2('six')">赤</button>
+			<button onClick="setFirstPrizeName('six')">優勝</button>
+			<button onClick="setSecondPrizeName('six')">準優勝</button>
+			<button onClick="setDesignPrizeName('six')">デザイン賞</button>
+		</div>
+	</div>
+	<div id="tournament">
+		<button class="first-left" onClick="setWinner('first-left')">1左</button>
+		<button class="first-right"  onClick="setWinner('first-right')">1右</button>
+		<button class="second-left"  onClick="setWinner('second-left')">2左</button>
+		<button class="second-right"   onClick="setWinner('second-right')">2右</button>
+		<button class="third-left"  onClick="setWinner('third-left')">3左</button>
+		<button class="third-right"   onClick="setWinner('third-right')">3右</button>
+		<button class="fourth-left"  onClick="setWinner('fourth-left')">4左</button>
+		<button class="fourth-right"   onClick="setWinner('fourth-right')">4右</button>
+		<button class="fifth-left"  onClick="setWinner('fifth-left')">5左</button>
+		<button class="fifth-right"  onClick="setWinner('fifth-right')">5右</button>
+		<p class="name A">山口一郎</p>
+		<p class="name B">山口一郎</p>
+		<p class="name C">山口一郎</p>
+		<p class="name D">山口一郎</p>
+		<p class="name E">山口一郎</p>
+		<p class="name F">山口一郎</p>
+	</div>
+</div>
+<button id="setParticipants" onClick="setParticipants()">参加者登録</button>
+<button id="battleStart" onClick="battleStart()">競技開始</button>
+<button id="battleExtend" onClick="battleExtend()">競技延長</button>
+<button id="clearTournament" onClick="clearTournament()">tournamentclear</button>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/jquery.min.js"></script>
+<script>
+var socket = io();
+var current = document.querySelector("span#current");
+
+var transition = (fileName) => {
+  socket.emit("transition", fileName);
+  current.innerText = fileName;
+};
+
+var changeSlide = (direction) => {
+	if (direction == "next")
+		socket.emit("nextSlide", null);
+	else if (direction == "prev")
+		socket.emit("prevSlide", null);
+}
+
+var setPlayer1 = (num) => {
+	var class_name = 'input.' + num;
+	console.log(class_name);
+	socket.emit("setPlayer1", $(class_name).val());
+}
+
+var setPlayer2 = (num) => {
+	var class_name = 'input.' + num;
+	console.log(class_name);
+	socket.emit("setPlayer2", $(class_name).val());
+}
+
+var battleStart = () => {
+	socket.emit("battleStart", null);
+}
+
+var battleExtend = () => {
+	socket.emit("battleExtend", null);
+}
+
+var setNextTime = () => {
+	var data = {
+		"dolly" : $("input#dolly").val(),
+		"cc2018" : $("input#cc2018").val()
+	};
+
+	console.log(data);
+
+	socket.emit("setNextTime", data);
+}
+
+var setFirstPrizeName = (num) => {
+	var class_name = 'input.' + num;
+	socket.emit("setFirstPrizeName", $(class_name).val());
+}
+
+var setSecondPrizeName = (num) => {
+	var class_name = 'input.' + num;
+	socket.emit("setSecondPrizeName", $(class_name).val());
+}
+
+var setDesignPrizeName = (num) => {
+	var class_name = 'input.' + num;
+	socket.emit("setDesignPrizeName", $(class_name).val());
+}
+
+var setParticipants = () => {
+	var participants = [];
+
+	$("input.participant").each((i, elem) => {
+		participants.push($(elem).val());
+	});
+
+	$("p.name").each((i, elem) => {
+		elem.innerText = participants[i];
+	})
+
+	console.log(participants);
+	socket.emit("setParticipants", participants);
+}
+
+var setWinner = (classname) => {
+	console.log(classname);
+	socket.emit("setWinner", classname);
+
+	switch(classname) {
+		case "first-left":
+			var log = {
+				battleNum: 0,
+				LR: 0
+			};
+			break;
+		case "first-right":
+			var log = {
+				battleNum: 0,
+				LR: 1
+			}
+			break;
+		case "second-left":
+			var log = {
+				battleNum: 1,
+				LR: 0
+			};
+			break;
+		case "second-right":
+			var log = {
+				battleNum: 1,
+				LR: 1
+			}
+			break;
+		case "third-left":
+			var log = {
+				battleNum: 2,
+				LR: 0
+			};
+			break;
+		case "third-right":
+			var log = {
+				battleNum: 2,
+				LR: 1
+			}
+			break;
+		case "fourth-left":
+			var log = {
+				battleNum: 3,
+				LR: 0
+			};
+			break;
+		case "fourth-right":
+			var log = {
+				battleNum: 3,
+				LR: 1
+			}
+			break;
+		case "fifth-left":
+			var log = {
+				battleNum: 4,
+				LR: 0
+			};
+			break;
+		case "fifth-right":
+			var log = {
+				battleNum: 4,
+				LR: 1
+			}
+			break;
+	}
+
+	socket.emit("setWinlog", log);
+}
+
+var clearTournament = () => {
+	socket.emit("clearTournament", null);
+}
+</script>
+</body>
+</html>

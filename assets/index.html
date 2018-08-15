@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>デフォルト画面</title>
+<link rel="stylesheet" href="css/commonStyle.css">
+</head>
+<body>
+<p class="nextTime" id="dolly">00:00</p>
+<p class="nextTime" id="cc2018">00:00</p>
+<img src="images/index/home.png" id="home" class="slide">
+<img src="images/index/word.jpg" id="word" class="slide" style="opacity: 0">
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/commonScript.js"></script>
+<script src="js/jquery.min.js"></script>
+</body>
+<script type="text/javascript">
+	var elements = document.querySelectorAll(".slide");
+	var currentShowNum = 0;
+	var transitionTime = 3000;
+
+	$(window).load(() => {
+		socket.emit("getNextTime", null);
+	})
+
+	socket.on("getNextTime", (time) => {
+	  	$("p#dolly").text(time.dolly + '〜');
+	  	$("p#cc2018").text(time.cc2018 + '〜');
+	});
+	
+	var changeSlide = () => {
+
+		if(currentShowNum === (elements.length-1)) {
+			$("p#dolly").animate({opacity: '1'}, transitionTime + 800);
+			$("p#cc2018").animate({opacity: '1'}, transitionTime + 800);
+
+			$(elements[currentShowNum]).animate({opacity: '0'}, transitionTime);
+			$(elements[0]).animate({opacity: '1'}, transitionTime);
+			currentShowNum = 0;
+		} else {
+			$("p#dolly").animate({opacity: '0'}, transitionTime - 800);
+			$("p#cc2018").animate({opacity: '0'}, transitionTime - 800);
+
+			$(elements[currentShowNum]).animate({opacity: '0'}, transitionTime);
+			$(elements[currentShowNum + 1]).animate({opacity: '1'}, transitionTime);
+			currentShowNum += 1;
+		}
+	}
+
+	setInterval(changeSlide, transitionTime + 6000);
+</script>
+<style type="text/css">
+	body {
+		background: #f7ec39;
+	}
+
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 1920px;
+		z-index: 0;
+	}
+
+	.slide {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	p.nextTime {
+		position: absolute;
+		top: 530px;
+		z-index: 1000;
+		font-size: 80px;
+		font-weight: bold;
+		font-family: "Kozuka Gothic Pr6N";
+		color: #313131;
+	}
+
+	p#dolly {
+		left: 230px;
+	}
+
+	p#cc2018 {
+		right: 200px;
+	}
+</style>
+</html>

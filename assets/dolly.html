@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ドリィデモ画面</title>
+<link rel="stylesheet" href="css/commonStyle.css">
+</head>
+<body>
+<img src="images/dolly/dolly.gif" id="dolly" style="display: none;">
+<div id="slides">
+	<div class="slide"><img src="images/dolly/スクリーン投影用スライド.001.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.002.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.003.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.004.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.005.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.006.png"><video src="images/dolly/theojansen.mov" id="theojansen"></video></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.007.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.008.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.009.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.010.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.011.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.012.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.013.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.014.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.015.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.016.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.017.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.018.png"></div>
+	<div class="slide" style="display: none;"><img src="images/dolly/スクリーン投影用スライド.019.png"></div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/commonScript.js"></script>
+<script src="js/jquery.min.js"></script>
+</body>
+<script type="text/javascript">
+	var slides = document.querySelectorAll("div.slide");
+	var video = document.querySelector("video#theojansen")
+	var currentShowNum = 0;
+
+	socket.on("nextSlide", (data) => {
+	  	changeSlide(1);
+	});
+
+	socket.on("prevSlide", (data) => {
+	  	changeSlide(-1);
+	});
+	
+	var changeSlide = (direction) => {
+		$(slides[currentShowNum]).hide();
+
+		currentShowNum += direction;
+
+		if(direction == 1) {
+			if(currentShowNum > (slides.length -1))
+				currentShowNum -= 1;
+		} else if(direction == -1) {
+			if(currentShowNum < 0)
+				currentShowNum += 1;
+		}
+
+		console.log(currentShowNum);
+		$(slides[currentShowNum]).show();
+		
+		if(currentShowNum != 0) 
+			$("img#dolly").show();
+		else
+			$("img#dolly").hide();
+
+		if(currentShowNum == 5)
+			video.play();
+
+	}
+</script>
+<style type="text/css">
+	body {
+		background: #f7ec39;
+	}
+
+	img {
+		width: 100%;
+	}
+
+	img#dolly {
+		width: 430px;
+		position: absolute;
+		z-index: 999;
+		bottom: -20px;
+		right: -20px;
+	}
+
+	.slide {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	video#theojansen {
+		position: absolute;
+		width: 1000px;
+		top: 400px;
+		left: 460px;
+	}
+</style>
+</html>
